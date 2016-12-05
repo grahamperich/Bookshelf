@@ -6,7 +6,6 @@ app.service('Book', function() {
 
 app.controller('BooksController', function($scope, Book) {
 
-  
   $scope.library = [];
 
   $scope.createBook = function(title, author, pages, read) {
@@ -18,8 +17,16 @@ app.controller('BooksController', function($scope, Book) {
         read: false, // BOOLEAN
         quotes: [], // ARRAY
         editorEnabled: false,
-        toggleEditor: function(){
+        showQuotes: false,
+        toggleQuotes: function() {
+          this.showQuotes = !this.showQuotes;
+        },
+        toggleEditor: function() {
           this.editorEnabled = !this.editorEnabled;
+        },
+        addQuote: function(newQuote) {
+          this.quotes.push(newQuote);
+          this.newQuote = null;
         }
       }
 

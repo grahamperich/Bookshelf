@@ -5,13 +5,17 @@ body {
 
 ul {
   list-style: none;
+  background-color: #bdc3c7;
+  border-radius: 10px;
+  position: relative;
+  padding-right: 40px;
 }
 
 li {
   padding: 10px
 }
 
-li:hover {
+.book:hover {
   background-color: #2ecc71;
   border-radius: 10px;
 }
@@ -31,9 +35,16 @@ li:hover {
 
 #library {
   border-radius: 10px;
+  margin: 25px;
 }
 
 .right {
   float: right;
+}
+
+.title {
+  font-size: 18px;
+  font-style: italic;
+  font-weight: bold;
 }
 
