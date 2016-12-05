@@ -1,0 +1,39 @@
+body {
+  font-family: sans-serif;
+
+}
+
+ul {
+  list-style: none;
+}
+
+li {
+  padding: 10px
+}
+
+li:hover {
+  background-color: #2ecc71;
+  border-radius: 10px;
+}
+
+#main {
+  width: 900px;
+  margin: 0 auto;
+  background-color: #27ae60;
+}
+
+#container {
+  margin: 10px;
+  padding: 20px;
+  background-color: #ecf0f1;
+  border-radius: 10px;
+}
+
+#library {
+  border-radius: 10px;
+}
+
+.right {
+  float: right;
+}
+

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Bookshelf.io</title>
+  <script type="text/javascript" src="/node_modules/angular/angular.js"></script>
+	<script type="text/javascript" src="index.js"></script>
+  <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body ng-app="App" id="main">
+  <div ng-controller="BooksController" id="container">
+    <h1> Bookshelf </h1>
+
+    <div>
+      Title </br>
+      <input ng-model="title"></input> </br>
+
+      Author </br>
+      <input ng-model="author"></input> </br>
+
+      <button ng-click="createBook(title, author)"> Submit </button>
+    </div>
+
+    <div id="library">
+      <ul>
+
+        <li ng-repeat="book in library">
+
+          <strong>Title:</strong> 
+          <span ng-hide="book.editorEnabled"> 
+            {{ book.title }} 
+          </span>
+          <input ng-show="book.editorEnabled" ng-model="book.title">
+
+          <div class="right" ng-model="pages"> 
+            <span ng-hide="book.editorEnabled"> Pages: {{ book.pages || 0 }} </span>
+            <input ng-show="book.editorEnabled" ng-model="book.pages">
+            <button ng-hide="book.editorEnabled" ng-click="book.toggleEditor()">Edit</button>
+            <button ng-show="book.editorEnabled" ng-click="book.toggleEditor()">Save</button>
+          </div></br>
+
+          <strong>Author:</strong> 
+          <span ng-hide="book.editorEnabled"> 
+            {{ book.author }} 
+          </span>
+          <input ng-show="book.editorEnabled" ng-model="book.author">    
+
+        </li>
+
+      </ul>
+    </div>
+
+  </div>
+
+</body>
+</html>
+
+

@@ -17,10 +17,8 @@ Once the project moves into development, the press release can be used as a touc
  -->
  
 ## Bookshelf ##
-  > Name the product in a way the reader (i.e. your target customers) will understand.
 
 ## The online library — organize and track which books you're reading ##
-  > Describe who the market for the product is and what benefit they get. One sentence only underneath the title.
 
 ## Summary ##
   Bookshelf is your personal library in the cloud. Use it to archive old favorites, keep a record of each book's best quotes, and maintain a running list of what you plan to read next! You can also show off your library on social media and compete with friends to see who is reading the most. Keep reading and watch your library grow. If someone is curious about what you're reading or have read so far this year, just link them to your Bookshelf.
