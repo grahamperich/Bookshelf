@@ -1,6 +1,7 @@
 var app = angular.module('App', []);
 
 app.service('DBRunner', function($http) {
+  // All DB queries are handled by the DBRunner service
 
   this.fetch = function(title) {
     return $http({
@@ -9,25 +10,59 @@ app.service('DBRunner', function($http) {
     })
   }
 
-  this.send = function(book) {
+  this.sendBook = function(book) {
     return $http({
       method: 'POST',
       url: '/api/books',
       data: JSON.stringify(book)
     })
   }
+
+  this.deleteBook = function(book) {
+
+  }
+
 });
 
 app.controller('BooksController', function($scope, $http, DBRunner) {
 
   $scope.library = [];
+  // When controller is initialized, populate library with data from the DB
+  DBRunner.fetch().then(function (response) {
+    var booksArr = response.data;
 
-  $scope.createBook = function(title, author, pages, quotes) {
+    booksArr.forEach(function(book) {
+      $scope.createBook(book.title, book.author, false, book.pages, book.quotes);
+    })
+  }, function(err) { console.log(err) });
+
+  $scope.isBookInDB = function(newBook) {
+    // Check if newBook.title matches any current book records
+    DBRunner.fetch().then(function (response) {
+      var booksArr = response.data;
+      var bookNotInDb = true;
+
+      booksArr.forEach(function(book) {
+        if (book.title === newBook.title) {
+          bookNotInDb = false
+        } 
+      });
+      // if it doesn't, create a new DB entry and update the DOM
+      if (bookNotInDb) {
+        $scope.library.push(newBook);
+        DBRunner.sendBook(newBook).then(function(response) { console.log(response + 'sent!') }, function(err) { console.log(err) });
+      } 
+
+    }, function (err) { console.log(err) });
+  }
+
+  $scope.createBook = function(title, author, bool, pages, quotes) {
+    bool = bool || false;
     if (title && author) {
       var newBook = {
         title: title, 
         author: author, 
-        pages: pages, 
+        pages: pages || 0, 
         quotes: quotes || [], 
         editorEnabled: false,
         showQuotes: false,
@@ -43,36 +78,19 @@ app.controller('BooksController', function($scope, $http, DBRunner) {
         }
       }
 
+      // Set these values to null in the DOM to clear input fields after user submits a new Book
       $scope.title = null;
       $scope.author = null;
 
-      // Check if newBook.title matches any current book records
-      DBRunner.fetch().then(function (response) {
-        var booksArr = response.data;
-        var bookNotInDb = true;
-
-        // if it does, just append that pre-existing book to the DOM but don't put it on the database
-        booksArr.forEach(function(book) {
-          if (book.title === newBook.title) {
-            bookNotInDb = false
-          } 
-        });
-
-        // if it doesn't, create a new DB entry and update the DOM
-        if (bookNotInDb) {
-          $scope.library.push(newBook);
-          DBRunner.send(newBook).then(function(response) { console.log(response + 'sent!') }, function(err) { console.log(err) });
-        } else {
-          $scope.library.push(newBook);
-        }
-
-      }, function (err) { console.log(err) });
-
+      // if createBook() is invoked from the DOM, this boolean is true and the DB is checked for dupes
+      if (bool === true) {
+        $scope.isBookInDB(newBook);   
+      } else {
+        // if createBook() is invoked on init, this boolean is false since the app is using DB values to populate the DOM
+        // and another check is redundant. So we just populate on the DOM without checking the DB.
+        $scope.library.push(newBook);
+      }
     } // if title && author
   }
-
-    $scope.createBook('Harry Potter', 'J.K. Rowling', 100);
-    $scope.createBook('When Breath Becomes Air', 'Paul Kalinthi', 350);
-
 
 });
