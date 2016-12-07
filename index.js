@@ -1,4 +1,19 @@
-var app = angular.module('App', []);
+var app = angular.module('App', ['ngRoute']);
+
+app.config(function($routeProvider) {
+  $routeProvider
+    .when('/home', {
+      templateUrl: 'partials/home.html',
+      controller: 'BooksController'
+    })
+    .when('/botd', {
+      templateUrl: 'partials/botd.html',
+      controller: 'BooksController'
+    })
+    .otherwise({
+      redirectTo: '/home'
+    });
+});
 
 app.service('DBRunner', function($http) {
   // All DB queries are handled by the DBRunner service
@@ -18,10 +33,29 @@ app.service('DBRunner', function($http) {
     })
   }
 
-  this.deleteBook = function(book) {
+  this.deleteBook = function(title) {
+    var obj = {title: title};
 
+    return $http({
+      method: 'POST',
+      url: '/api/books/delete',
+      data: JSON.stringify(obj)
+    })
   }
 
+});
+
+app.service('APICaller', function($http) {
+  this.fetch = function(title) {
+    return $http({
+      method: 'GET',
+      url: '/api/books',
+    })
+  }
+});
+
+app.service('Library', function() {
+  this.books = [];
 });
 
 app.controller('BooksController', function($scope, $http, DBRunner) {
@@ -92,5 +126,15 @@ app.controller('BooksController', function($scope, $http, DBRunner) {
       }
     } // if title && author
   }
+
+  $scope.deleteBook = function(index, title) {
+    DBRunner.deleteBook(title);
+    console.log(index, title);
+    $scope.library.splice(index, 1);
+  }
+
+});
+
+app.controller('APIController', function($scope, APICaller) {
 
 });

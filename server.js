@@ -33,22 +33,18 @@ var bookSchema = mongoose.Schema({
 
 var Book = mongoose.model('Book', bookSchema);
 
-// var testBook = new Book({
-//   title: 'Hello',
-//   author: 'World',
-//   pages: 100,
-//   quotes: []
-// });
-
-// testBook.save(function(err) {
-//   if (err) {
-//     console.log('error: ', err);
-//   }
-// });
 
 // SERVE STATIC ASSETS
 app.get('/', function(req, res) {
   res.sendFile(path.join(__dirname + '/index.html'));
+});
+
+app.get('/partials/home.html', function(req, res) {
+  res.sendFile(path.join(__dirname + '/partials/home.html'));
+});
+
+app.get('/partials/botd.html', function(req, res) {
+  res.sendFile(path.join(__dirname + '/partials/botd.html'));
 });
 
 app.get('/style.css', function(req, res) {
@@ -57,6 +53,10 @@ app.get('/style.css', function(req, res) {
 
 app.get('/node_modules/angular/angular.js', function(req, res) {
   res.sendFile(path.join(__dirname + '/node_modules/angular/angular.js'));
+});
+
+app.get('/node_modules/angular/angular-route.js', function(req, res) {
+  res.sendFile(path.join(__dirname + '/node_modules/angular-route/angular-route.js'));
 });
 
 app.get('/index.js', function(req, res) {
@@ -82,13 +82,7 @@ app.get('/api/books', function(req, res) {
 app.post('/api/books', jsonParser, function(req, res) {
   console.log(req.body);
   var b = req.body;
-  // Book.find().then(function(err, books) {
-  //   if (err){
-  //     res.send(err)
-  //   } else {
-  //     res.send(books);
-  //   }
-  // })
+
   var newBook = new Book({
     title: b.title,
     author: b.author,
@@ -105,6 +99,12 @@ app.post('/api/books', jsonParser, function(req, res) {
   res.send(newBook);
 });
 
-app.post('/', jsonParser, function(req, res) {
+app.post('/api/books/delete', jsonParser, function(req, res) {
   console.log(req.body);
-})
+  var b = req.body;
+
+  var query = Book.find().remove(b);
+  query.exec();
+
+  res.end();
+});

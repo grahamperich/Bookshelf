@@ -1,0 +1,58 @@
+<div ng-controller="BooksController" id="container">
+      <h1> Bookshelf </h1>
+        <a href="#/botd" class="btn btn-primary">Book Info</a>
+        <h4>Add a Book...</h4>
+        <input class="form-control" ng-model="title" placeholder="Title"></input> </br>
+
+        <input class="form-control" ng-model="author" placeholder="Author"></input> 
+        </br>
+
+        <button ng-click="createBook(title, author, true)" class="btn btn-success"> Submit </button>
+
+
+      <div id="library">
+
+        <ul id="book-list">
+          <input class="form-control" ng-model="searchText" placeholder="Search Library...">
+
+          <li ng-repeat="book in library | filter: searchText" class="book">
+
+            <span ng-hide="book.editorEnabled"> 
+              <span class="title"> {{ book.title }} </span>
+              
+            </span>
+            <input ng-show="book.editorEnabled" ng-model="book.title">
+
+            <div class="right" ng-model="pages"> 
+              <span ng-hide="book.editorEnabled"> Pages: {{ book.pages }} </span>
+              <input ng-show="book.editorEnabled" ng-model="book.pages">
+              <button class="btn btn-primary btn-xs" ng-hide="book.editorEnabled" ng-click="book.toggleEditor()">Edit</button>
+              <button class="btn btn-success btn-xs" ng-show="book.editorEnabled" ng-click="book.toggleEditor()">Save</button> </br>
+              <button href="#" ng-click="book.toggleQuotes()" class="btn btn-xs btn-warning right">Toggle Quotes</button>
+              <button href="#" ng-click="deleteBook($index, book.title)" ng-show="book.editorEnabled" class="btn btn-xs btn-danger right">Delete Book</button>
+            </div></br>
+
+            <span ng-hide="book.editorEnabled"> 
+              {{ book.author }} 
+            </span>
+            <input ng-show="book.editorEnabled" ng-model="book.author">
+
+            <div ng-show="book.showQuotes">
+              <h4>Quotes: </h4>
+                <div class="well">
+                  <ul>
+                    <li ng-repeat="quote in book.quotes">
+                      <em> {{ quote }} </em>
+                    </li>
+                  </ul>
+                </div>
+              <input ng-model="book.newQuote" class="form-control" placeholder="Add a new quote...">
+              <button ng-click="book.addQuote(book.newQuote)" class="btn btn-primary">Save</button>
+            </div>    
+
+          </li>
+
+        </ul>
+      </div>
+
+    </div>
