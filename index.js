@@ -49,7 +49,7 @@ app.service('APICaller', function($http) {
   this.fetch = function(title) {
     return $http({
       method: 'GET',
-      url: '/api/books',
+      url: 'https://www.googleapis.com/books/v1/volumes?q=' + title + '&key=' + API_KEY
     })
   }
 });
@@ -58,7 +58,7 @@ app.service('Library', function() {
   this.books = [];
 });
 
-app.controller('BooksController', function($scope, $http, DBRunner) {
+app.controller('BooksController', function($scope, $http, DBRunner, APICaller) {
 
   $scope.library = [];
   // When controller is initialized, populate library with data from the DB
@@ -100,6 +100,16 @@ app.controller('BooksController', function($scope, $http, DBRunner) {
         quotes: quotes || [], 
         editorEnabled: false,
         showQuotes: false,
+        getBookInfo: function() {
+          APICaller.fetch(this.title).then(function (response) {
+            var info = response.data.items[0].volumeInfo;
+            console.log(response);
+            this.description = info.description;
+            this.image = info.imageLinks.smallThumbnail;
+            this.fetched = true;
+            
+          }.bind(this), function(err) { console.log(err) });
+        },
         toggleQuotes: function() {
           this.showQuotes = !this.showQuotes;
         },
