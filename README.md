@@ -1,6 +1,4 @@
-# Project Name #
- 
-## Bookshelf ##
+# Bookshelf #
 
 ## The online library — organize and track which books you're reading ##
 
